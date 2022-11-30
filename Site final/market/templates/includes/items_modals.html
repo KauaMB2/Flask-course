@@ -1,0 +1,88 @@
+<style type="text/css">
+  .modal-content{
+  background-color: #212121;
+  width: 600px;
+  }
+</style>
+
+<div class="modal" id="Modal-MoreInfo-{{ item.id}}" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ item.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ item.description }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="Modal-PurchaseItem-{{ item.id}}" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ item.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form  method="POST">
+          {{ purchase_form.hidden_tag() }}
+          <h4>Are you sure you want to buy {{ item.name }}?</h4>
+          <h6>
+            Product Price: <span class="badget bg-danger rounded">{{item.price}}$</span>
+          </h6>
+          <br>
+          <div class="modal-footer">
+            <input id="purchased_item" type="hidden" name="purchased_item" value="{{ item.name }}">
+            {{ purchase_form.submit(class="btn btn-outline-primary") }}
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="Modal-CommentItem-{{ item.id}}" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-fullscreen" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Comment about <span class="badget bg-warning rounded">{{ item.name }}</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form  method="POST">
+          {{ comment_form.hidden_tag() }}
+          {% for i in range(0,lenCommentsList,1): %}
+            {% if item.name in nameList[i]: %}
+              {% for name in comments[i][item.name].keys(): %}
+                <div class="my-3 p-3 rounded rounded-3" style="background-color: #303030;">
+                  <h5 class="badget rounded">{{ name }}</h5>
+                  <p>{{ comments[i][item.name][name] }}</p>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          <div class="modal-footer">
+            {{ comment_form.comment_input.label() }}
+            {{ comment_form.comment_input(class="form-control", placeholder="Comment here") }}
+            <input id="commented_item" type="hidden" name="commented_item" value="{{ item.name }}">
+            {{ comment_form.submit(class="btn btn-outline-primary") }}
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
